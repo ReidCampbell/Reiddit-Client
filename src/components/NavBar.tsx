@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Link, Flex, Button, Heading } from '@chakra-ui/core';
+import { Box, Link, Flex, Button, Heading, Avatar } from '@chakra-ui/core';
 import NextLink from 'next/link';
 import { useLogoutMutation, useMeQuery } from '../generated/graphql';
 import { isServer } from '../utils/isServer';
@@ -20,7 +20,7 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
     body = (
       <>
         <NextLink href='/login'>
-          <Link mr={2}>Login</Link>
+          <Link mr={5}>Login</Link>
         </NextLink>
         <NextLink href='/register'>
           <Link>Register</Link>
@@ -30,11 +30,10 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
   } else {
     body = (
       <Flex>
-        <NextLink href='/create-post'>
-          <Link mr={2}>Create post</Link>
-        </NextLink>
-        <Box mr={2}>{data.me.username}</Box>
-        <Button
+        {/* <NextLink href='/create-post'> */}
+        <Avatar size='sm' />
+        {/* </NextLink> */}
+        {/* <Button
           variant='link'
           onClick={async () => {
             await logout();
@@ -43,19 +42,21 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
           isLoading={logoutLoading}
         >
           Logout
-        </Button>
+        </Button> */}
       </Flex>
     );
   }
   return (
-    <Flex bg='tomato' p={4} position='sticky' top={0} zIndex={1} align='center'>
-      <NextLink href='/'>
-        <Link>
-          <Heading>Reiddit</Heading>
-        </Link>
-      </NextLink>
-      <Box ml={'auto'}>{body}</Box>
-    </Flex>
+    <Box bg='white' boxShadow='md' p={4} position='sticky' top={0} zIndex={1}>
+      <Flex mx='auto' maxWidth='800px' align='center'>
+        <NextLink href='/'>
+          <Link>
+            <Heading>Reiddit</Heading>
+          </Link>
+        </NextLink>
+        <Box ml='auto'>{body}</Box>
+      </Flex>
+    </Box>
   );
 };
 
