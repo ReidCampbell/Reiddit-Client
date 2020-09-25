@@ -47,11 +47,11 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
     );
   }
   return (
-    <Box bg='white' boxShadow='md' p={4} position='sticky' top={0} zIndex={1}>
+    <Box bg='white' boxShadow='lg' p={4} position='sticky' top={0} zIndex={1}>
       <Flex mx='auto' maxWidth='800px' align='center'>
         <NextLink href='/'>
           <Link>
-            <Heading>Reiddit</Heading>
+            <Heading>REIDDIT</Heading>
           </Link>
         </NextLink>
         <Box ml='auto'>{body}</Box>
