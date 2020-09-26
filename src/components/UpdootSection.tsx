@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, IconButton } from '@chakra-ui/core';
+import { Flex, IconButton, Text } from '@chakra-ui/core';
 import {
   PostSnippetFragment,
   useVoteMutation,
@@ -53,7 +53,7 @@ const updateAfterVote = (
 const UpdootSection: React.FC<UpdootSectionProps> = ({ post }) => {
   const [vote] = useVoteMutation();
   return (
-    <Flex direction='column' justify='center' align='center'>
+    <Flex direction='column' align='center'>
       <IconButton
         onClick={async () => {
           if (post.voteStatus === 1) {
@@ -67,12 +67,24 @@ const UpdootSection: React.FC<UpdootSectionProps> = ({ post }) => {
             update: cache => updateAfterVote(1, post.id, cache),
           });
         }}
-        variantColor={post.voteStatus === 1 ? 'green' : undefined}
+        variantColor={post.voteStatus === 1 ? '#3d5af1' : undefined}
         variant='ghost'
-        icon='chevron-up'
+        icon='arrow-up'
+        size='lg'
         aria-label='Updoot'
+        color='#aaaaaa'
       />
-      {post.points}
+      <Text
+        color={
+          post.voteStatus === -1
+            ? '#ff304f'
+            : post.voteStatus === 1
+            ? '#3d5af1'
+            : '#aaaaaa'
+        }
+      >
+        {post.points}
+      </Text>
       <IconButton
         onClick={async () => {
           if (post.voteStatus === -1) {
@@ -86,10 +98,12 @@ const UpdootSection: React.FC<UpdootSectionProps> = ({ post }) => {
             update: cache => updateAfterVote(-1, post.id, cache),
           });
         }}
-        variantColor={post.voteStatus === -1 ? 'red' : undefined}
+        variantColor={post.voteStatus === -1 ? '#ff304f' : undefined}
         variant='ghost'
-        icon='chevron-down'
+        icon='arrow-down'
+        size='lg'
         aria-label='Downdoot'
+        color='#aaaaaa'
       />
     </Flex>
   );
