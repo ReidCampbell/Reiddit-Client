@@ -67,12 +67,11 @@ const UpdootSection: React.FC<UpdootSectionProps> = ({ post }) => {
             update: cache => updateAfterVote(1, post.id, cache),
           });
         }}
-        variantColor={post.voteStatus === 1 ? '#3d5af1' : undefined}
+        color={post.voteStatus === 1 ? '#3d5af1' : '#aaaaaa'}
         variant='ghost'
         icon='arrow-up'
-        size='lg'
+        size='sm'
         aria-label='Updoot'
-        color='#aaaaaa'
       />
       <Text
         color={
@@ -98,12 +97,11 @@ const UpdootSection: React.FC<UpdootSectionProps> = ({ post }) => {
             update: cache => updateAfterVote(-1, post.id, cache),
           });
         }}
-        variantColor={post.voteStatus === -1 ? '#ff304f' : undefined}
+        color={post.voteStatus === -1 ? '#ff304f' : '#aaaaaa'}
         variant='ghost'
         icon='arrow-down'
-        size='lg'
+        size='sm'
         aria-label='Downdoot'
-        color='#aaaaaa'
       />
     </Flex>
   );
