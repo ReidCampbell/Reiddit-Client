@@ -50,9 +50,7 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
     <Box bg='white' boxShadow='lg' p={4} position='sticky' top={0} zIndex={1}>
       <Flex mx='auto' maxWidth='800px' align='center'>
         <NextLink href='/'>
-          <Link>
-            <Heading>REIDDIT</Heading>
-          </Link>
+          <Heading cursor='pointer'>REIDDIT</Heading>
         </NextLink>
         <Box ml='auto'>{body}</Box>
       </Flex>
