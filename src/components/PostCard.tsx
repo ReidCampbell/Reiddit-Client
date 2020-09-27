@@ -7,18 +7,28 @@ import { Divider } from '@chakra-ui/core';
 import dayjs from 'dayjs';
 
 interface PostCardProps {
-  post: Post;
+  post: any;
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post }) => {
-  const now = dayjs();
-  const postTime = dayjs(parseInt(post.createdAt));
-  let timeSincePost = now.diff(postTime, 'day');
+  const getPostTime = () => {
+    const now = dayjs();
+    const postTime = dayjs(parseInt(post.createdAt));
+    const timeSincePost = now.diff(postTime, 'minute');
+
+    if (timeSincePost / (60 * 24) > 1) {
+      return `${Math.floor(timeSincePost / (60 * 24))} day(s) ago`;
+    } else if (timeSincePost / 24 > 1) {
+      return `${Math.floor(timeSincePost / 24)} hour(s) ago`;
+    }
+
+    return `${Math.floor(timeSincePost)} minute(s) ago`;
+  };
 
   return (
     <Flex backgroundColor='white' mt={45} p={5} shadow='lg' borderRadius='12px'>
       <UpdootSection post={post} />
-      <Box ml={4} flex={1}>
+      <Box px='2rem' flex={1}>
         <NextLink href='/post/[id]' as={`/post/${post.id}`}>
           <Link ml='auto'>
             <Heading color='#444444' fontSize='xl'>
@@ -42,7 +52,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
               </Box>
             </Text>
             <Text fontSize='xs' color='#aaaaaa'>
-              {timeSincePost} days ago
+              {getPostTime()}
             </Text>
           </Flex>
         </Flex>
