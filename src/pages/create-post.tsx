@@ -9,7 +9,7 @@ import { useIsAuth } from '../utils/useIsAuth';
 import { withApollo } from '../utils/withApollo';
 
 const CreatePost: React.FC<{}> = ({}) => {
-  // useIsAuth();
+  useIsAuth();
   const [createPost] = useCreatePostMutation();
   const router = useRouter();
 
