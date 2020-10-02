@@ -2,7 +2,6 @@ import { Text, Flex, Box, Link, Heading, Avatar } from '@chakra-ui/core';
 import React from 'react';
 import UpdootSection from './UpdootSection';
 import NextLink from 'next/link';
-import { Post } from '../generated/graphql';
 import { Divider } from '@chakra-ui/core';
 import dayjs from 'dayjs';
 
@@ -10,7 +9,7 @@ interface PostCardProps {
   post: any;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post }) => {
+const PostCard: React.FC<PostCardProps> = ({ post, children }) => {
   const getPostTime = () => {
     const now = dayjs();
     const postTime = dayjs(parseInt(post.createdAt));
@@ -26,7 +25,14 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   };
 
   return (
-    <Flex backgroundColor='white' mt={45} p={5} shadow='lg' borderRadius='12px'>
+    <Flex
+      backgroundColor='white'
+      my={22}
+      mx={5}
+      p={5}
+      shadow='lg'
+      borderRadius='12px'
+    >
       <UpdootSection post={post} />
       <Box px='2rem' flex={1}>
         <NextLink href='/post/[id]' as={`/post/${post.id}`}>
@@ -38,7 +44,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         </NextLink>
         <Flex align='center'>
           <Text color='#959595' flex={1} mt={4}>
-            {post.textSnippet}
+            {post.text ? post.text : post.textSnippet}
           </Text>
         </Flex>
         <Divider mt={4} borderColor='#aaaaaa' />
@@ -56,13 +62,10 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
             </Text>
           </Flex>
         </Flex>
+        {children}
       </Box>
     </Flex>
   );
 };
 
 export default PostCard;
-
-{
-  /* <Text>{post.creator.username}</Text> */
-}
