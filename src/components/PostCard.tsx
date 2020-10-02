@@ -9,7 +9,7 @@ interface PostCardProps {
   post: any;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post }) => {
+const PostCard: React.FC<PostCardProps> = ({ post, children }) => {
   const getPostTime = () => {
     const now = dayjs();
     const postTime = dayjs(parseInt(post.createdAt));
@@ -44,7 +44,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         </NextLink>
         <Flex align='center'>
           <Text color='#959595' flex={1} mt={4}>
-            {post.textSnippet}
+            {post.text ? post.text : post.textSnippet}
           </Text>
         </Flex>
         <Divider mt={4} borderColor='#aaaaaa' />
@@ -62,6 +62,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
             </Text>
           </Flex>
         </Flex>
+        {children}
       </Box>
     </Flex>
   );
