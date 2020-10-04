@@ -24,6 +24,15 @@ const PostCard: React.FC<PostCardProps> = ({ post, children }) => {
     return `${Math.floor(timeSincePost)} minute(s) ago`;
   };
 
+  const calculateComments = () => {
+    let comments: number[] = [];
+    post.comments.map((comment: any) => {
+      comments.push(comment.replies.length);
+    });
+
+    return comments.reduce((a, b) => a + b, 0) + post?.comments?.length;
+  };
+
   return (
     <Flex
       backgroundColor='white'
@@ -60,6 +69,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, children }) => {
             <Text fontSize='xs' color='#aaaaaa'>
               {getPostTime()}
             </Text>
+            <Text>{calculateComments()}</Text>
           </Flex>
         </Flex>
         {children}
