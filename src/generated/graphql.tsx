@@ -19,6 +19,8 @@ export type Query = {
   post?: Maybe<Post>;
   comments: PaginatedComments;
   comment?: Maybe<Comment>;
+  replies: PaginatedReplies;
+  reply?: Maybe<Reply>;
 };
 
 
@@ -40,6 +42,17 @@ export type QueryCommentsArgs = {
 
 
 export type QueryCommentArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryRepliesArgs = {
+  commentId: Scalars['Int'];
+  limit: Scalars['Int'];
+};
+
+
+export type QueryReplyArgs = {
   id: Scalars['Int'];
 };
 
@@ -84,11 +97,31 @@ export type Comment = {
   postId: Scalars['Float'];
   creator: User;
   post: Post;
+  replies?: Maybe<Array<Reply>>;
+};
+
+export type Reply = {
+  __typename?: 'Reply';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  text: Scalars['String'];
+  points: Scalars['Float'];
+  creatorId: Scalars['Float'];
+  commentId: Scalars['Float'];
+  creator: User;
+  comment: Comment;
 };
 
 export type PaginatedComments = {
   __typename?: 'PaginatedComments';
   comments: Array<Comment>;
+  hasMore: Scalars['Boolean'];
+};
+
+export type PaginatedReplies = {
+  __typename?: 'PaginatedReplies';
+  replies: Array<Reply>;
   hasMore: Scalars['Boolean'];
 };
 
@@ -106,6 +139,9 @@ export type Mutation = {
   createComment: Comment;
   updateComment?: Maybe<Comment>;
   deleteComment: Scalars['Boolean'];
+  createReply: Reply;
+  updateReply?: Maybe<Reply>;
+  deleteReply: Scalars['Boolean'];
 };
 
 
@@ -170,6 +206,23 @@ export type MutationDeleteCommentArgs = {
   id: Scalars['Int'];
 };
 
+
+export type MutationCreateReplyArgs = {
+  text: Scalars['String'];
+  commentId: Scalars['Int'];
+};
+
+
+export type MutationUpdateReplyArgs = {
+  text: Scalars['String'];
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteReplyArgs = {
+  id: Scalars['Int'];
+};
+
 export type UserResponse = {
   __typename?: 'UserResponse';
   errors?: Maybe<Array<FieldError>>;
@@ -199,7 +252,14 @@ export type PostSnippetFragment = (
   & { creator: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username'>
-  ) }
+  ), comments?: Maybe<Array<(
+    { __typename?: 'Comment' }
+    & Pick<Comment, 'id'>
+    & { replies?: Maybe<Array<(
+      { __typename?: 'Reply' }
+      & Pick<Reply, 'id'>
+    )>> }
+  )>> }
 );
 
 export type RegularErrorFragment = (
@@ -267,6 +327,20 @@ export type CreatePostMutation = (
   & { createPost: (
     { __typename?: 'Post' }
     & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'text' | 'points' | 'creatorId'>
+  ) }
+);
+
+export type CreateReplyMutationVariables = Exact<{
+  text: Scalars['String'];
+  commentId: Scalars['Int'];
+}>;
+
+
+export type CreateReplyMutation = (
+  { __typename?: 'Mutation' }
+  & { createReply: (
+    { __typename?: 'Reply' }
+    & Pick<Reply, 'text'>
   ) }
 );
 
@@ -381,7 +455,14 @@ export type PostQuery = (
       & { creator: (
         { __typename?: 'User' }
         & Pick<User, 'username'>
-      ) }
+      ), replies?: Maybe<Array<(
+        { __typename?: 'Reply' }
+        & Pick<Reply, 'id' | 'text' | 'createdAt' | 'updatedAt'>
+        & { creator: (
+          { __typename?: 'User' }
+          & Pick<User, 'username'>
+        ) }
+      )>> }
     )>> }
   )> }
 );
@@ -416,6 +497,12 @@ export const PostSnippetFragmentDoc = gql`
   creator {
     id
     username
+  }
+  comments {
+    id
+    replies {
+      id
+    }
   }
 }
     `;
@@ -552,6 +639,39 @@ export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
+export const CreateReplyDocument = gql`
+    mutation CreateReply($text: String!, $commentId: Int!) {
+  createReply(text: $text, commentId: $commentId) {
+    text
+  }
+}
+    `;
+export type CreateReplyMutationFn = Apollo.MutationFunction<CreateReplyMutation, CreateReplyMutationVariables>;
+
+/**
+ * __useCreateReplyMutation__
+ *
+ * To run a mutation, you first call `useCreateReplyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateReplyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createReplyMutation, { data, loading, error }] = useCreateReplyMutation({
+ *   variables: {
+ *      text: // value for 'text'
+ *      commentId: // value for 'commentId'
+ *   },
+ * });
+ */
+export function useCreateReplyMutation(baseOptions?: Apollo.MutationHookOptions<CreateReplyMutation, CreateReplyMutationVariables>) {
+        return Apollo.useMutation<CreateReplyMutation, CreateReplyMutationVariables>(CreateReplyDocument, baseOptions);
+      }
+export type CreateReplyMutationHookResult = ReturnType<typeof useCreateReplyMutation>;
+export type CreateReplyMutationResult = Apollo.MutationResult<CreateReplyMutation>;
+export type CreateReplyMutationOptions = Apollo.BaseMutationOptions<CreateReplyMutation, CreateReplyMutationVariables>;
 export const DeletePostDocument = gql`
     mutation DeletePost($id: Int!) {
   deletePost(id: $id)
@@ -828,6 +948,15 @@ export const PostDocument = gql`
       points
       creator {
         username
+      }
+      replies {
+        id
+        text
+        createdAt
+        updatedAt
+        creator {
+          username
+        }
       }
     }
   }

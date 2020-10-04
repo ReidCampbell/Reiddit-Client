@@ -10,4 +10,10 @@ fragment PostSnippet on Post {
     id
     username
   }
+  comments {
+    id
+    replies {
+      id
+    }
+  }
 }

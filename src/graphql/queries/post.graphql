@@ -20,6 +20,15 @@ query Post($id: Int!) {
       creator {
         username
       }
+      replies {
+        id
+        text
+        createdAt
+        updatedAt
+        creator {
+          username
+        }
+      }
     }
   }
 }
