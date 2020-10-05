@@ -15,6 +15,7 @@ const Wrapper: React.FC<WrapperProps> = ({ children, variant = 'regular' }) => {
       h='100%'
       mt={8}
       mx='auto'
+      minHeight='calc(100vh - 109px)'
     >
       {children}
     </Box>
