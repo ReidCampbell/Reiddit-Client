@@ -1,28 +1,19 @@
-import { Text, Flex, Box, Link, Heading, Avatar } from '@chakra-ui/core';
+import { Text, Flex, Box, Link, Heading, Avatar, Icon } from '@chakra-ui/core';
 import React from 'react';
 import UpdootSection from './UpdootSection';
 import NextLink from 'next/link';
 import { Divider } from '@chakra-ui/core';
 import dayjs from 'dayjs';
+import { useRouter } from 'next/router';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 interface PostCardProps {
   post: any;
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post, children }) => {
-  const getPostTime = () => {
-    const now = dayjs();
-    const postTime = dayjs(parseInt(post.createdAt));
-    const timeSincePost = now.diff(postTime, 'minute');
-
-    if (timeSincePost / (60 * 24) > 1) {
-      return `${Math.floor(timeSincePost / (60 * 24))} day(s) ago`;
-    } else if (timeSincePost / 24 > 1) {
-      return `${Math.floor(timeSincePost / 24)} hour(s) ago`;
-    }
-
-    return `${Math.floor(timeSincePost)} minute(s) ago`;
-  };
+  dayjs.extend(relativeTime);
+  const postTime = dayjs().to(parseInt(post.createdAt));
 
   const calculateComments = () => {
     let comments: number[] = [];
@@ -33,6 +24,8 @@ const PostCard: React.FC<PostCardProps> = ({ post, children }) => {
     return comments.reduce((a, b) => a + b, 0) + post?.comments?.length;
   };
 
+  const router = useRouter();
+
   return (
     <Flex
       backgroundColor='white'
@@ -41,6 +34,11 @@ const PostCard: React.FC<PostCardProps> = ({ post, children }) => {
       p={5}
       shadow='lg'
       borderRadius='12px'
+      onDoubleClick={() =>
+        router.push({
+          pathname: `/post/${post.id}`,
+        })
+      }
     >
       <UpdootSection post={post} />
       <Box px='2rem' flex={1}>
@@ -57,9 +55,9 @@ const PostCard: React.FC<PostCardProps> = ({ post, children }) => {
           </Text>
         </Flex>
         <Divider mt={4} borderColor='#aaaaaa' />
-        <Flex align='center' mt={4}>
-          <Avatar size='xs' mr={4} />
-          <Flex align='baseline'>
+        <Flex mt={4} justify='space-between'>
+          <Flex align='center'>
+            <Avatar size='xs' mr={4} />
             <Text fontSize='sm' color='#aaaaaa' mr={15}>
               Posted by{' '}
               <Box as='span' color='#3d5af1' fontSize='sm'>
@@ -67,9 +65,14 @@ const PostCard: React.FC<PostCardProps> = ({ post, children }) => {
               </Box>
             </Text>
             <Text fontSize='xs' color='#aaaaaa'>
-              {getPostTime()}
+              {postTime}
             </Text>
-            <Text>{calculateComments()}</Text>
+          </Flex>
+          <Flex align='baseline'>
+            <Icon name='chat' size='12px' mr={1} color='#aaaaaa' />
+            <Text fontSize='14px' color='#aaaaaa'>
+              {calculateComments()}
+            </Text>
           </Flex>
         </Flex>
         {children}

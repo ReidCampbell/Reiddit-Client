@@ -1,12 +1,12 @@
 import { Text, Flex, Box, Avatar, Button } from '@chakra-ui/core';
 import React, { useState } from 'react';
-import UpdootSection from './UpdootSection';
 import dayjs from 'dayjs';
 import { Formik, Form } from 'formik';
 import { PostDocument, useCreateReplyMutation } from '../generated/graphql';
 import InputField from './InputField';
 import { useGetIntId } from '../utils/useGetIntId';
 import { useRouter } from 'next/router';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 interface CommentCardProps {
   comment: any;
@@ -18,19 +18,8 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
   const intId = useGetIntId();
   const router = useRouter();
 
-  const getCommentTime = () => {
-    const now = dayjs();
-    const commentTime = dayjs(parseInt(comment.createdAt));
-    const timeSinceComment = now.diff(commentTime, 'minute');
-
-    if (timeSinceComment / (60 * 24) > 1) {
-      return `${Math.floor(timeSinceComment / (60 * 24))} day(s) ago`;
-    } else if (timeSinceComment / 24 > 1) {
-      return `${Math.floor(timeSinceComment / 24)} hour(s) ago`;
-    }
-
-    return `${Math.floor(timeSinceComment)} minute(s) ago`;
-  };
+  dayjs.extend(relativeTime);
+  const commentTime = dayjs().to(parseInt(comment.createdAt));
 
   return (
     <Box mt={4} p={4} backgroundColor='#fcfcfc'>
@@ -39,7 +28,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
           <Avatar size='xs' mr={2} />
           <Text>{comment.creator.username}</Text>
         </Flex>
-        <Text>{getCommentTime()}</Text>
+        <Text>{commentTime}</Text>
       </Flex>
       <Flex>
         {/* <UpdootSection post={comment.post} /> */}
