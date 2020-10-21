@@ -1,12 +1,20 @@
-import { Text, Flex, Box, Avatar, Button } from '@chakra-ui/core';
+import {
+  Text,
+  Flex,
+  Box,
+  Avatar,
+  Button,
+  IconButton,
+  Textarea,
+} from '@chakra-ui/core';
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import { Formik, Form } from 'formik';
 import { PostDocument, useCreateReplyMutation } from '../generated/graphql';
 import InputField from './InputField';
 import { useGetIntId } from '../utils/useGetIntId';
-import { useRouter } from 'next/router';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { RiMailSendLine } from 'react-icons/ri';
 
 interface CommentCardProps {
   comment: any;
@@ -16,7 +24,6 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
   const [replyOpen, setReplyOpen] = useState(false);
   const [createReply] = useCreateReplyMutation();
   const intId = useGetIntId();
-  const router = useRouter();
 
   dayjs.extend(relativeTime);
   const commentTime = dayjs().to(parseInt(comment.createdAt));
@@ -25,19 +32,31 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
     <Box mt={4} p={4} backgroundColor='#fcfcfc'>
       <Flex mb={3} justify='space-between'>
         <Flex>
-          <Avatar size='xs' mr={2} />
-          <Text>{comment.creator.username}</Text>
+          <Avatar
+            size='xs'
+            mr={2}
+            src={comment.creator.avatar ? comment.creator.avatar : ''}
+          />
+          <Text color='#3d5af1'>{comment.creator.username}</Text>
         </Flex>
-        <Text>{commentTime}</Text>
+        <Text fontSize='xs' color='#aaaaaa'>
+          {commentTime}
+        </Text>
       </Flex>
       <Flex>
         {/* <UpdootSection post={comment.post} /> */}
-        <Text mb={3}>{comment.text}</Text>
+        <Text ml='2rem' mb={3}>
+          {comment.text}
+        </Text>
       </Flex>
       <Text
         onClick={() => {
           setReplyOpen(!replyOpen);
         }}
+        fontSize='sm'
+        color='#aaaaaa'
+        ml='2rem'
+        cursor='pointer'
       >
         Reply
       </Text>
@@ -46,9 +65,13 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
           initialValues={{ text: '', commentId: null }}
           onSubmit={async (values, { resetForm }) => {
             const { errors } = await createReply({
-              variables: { ...values, commentId: comment.id },
+              variables: {
+                ...values,
+                commentId: comment.id,
+                commentOrReply: comment.postId ? 'comment' : 'reply',
+              },
               update: cache => {
-                cache.evict({ fieldName: 'comments:{}' });
+                cache.evict({ fieldName: 'replies:{}' });
               },
               refetchQueries: [
                 {
@@ -61,20 +84,26 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
             });
             if (!errors) {
               resetForm();
-              router.push({
-                pathname: `/post/${intId}`,
-              });
+              setReplyOpen(false);
             }
           }}
         >
           {({ isSubmitting }) => (
             <Form>
               <Box mt={4}>
-                <InputField textarea name='text' placeholder='' label='' />
+                <InputField textarea label='' name='text' placeholder='' />
               </Box>
-              <Button mt={4} type='submit' isLoading={isSubmitting}>
-                Create Comment
-              </Button>
+              <Flex justify='flex-end'>
+                <IconButton
+                  aria-label='Reply'
+                  icon={RiMailSendLine}
+                  mt={4}
+                  type='submit'
+                  isLoading={isSubmitting}
+                  color='#ffffff'
+                  backgroundColor='#3d5af1'
+                />
+              </Flex>
             </Form>
           )}
         </Formik>
