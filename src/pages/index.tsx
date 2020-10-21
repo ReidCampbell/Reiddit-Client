@@ -1,18 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import { usePostsQuery } from '../generated/graphql';
 import { Button, Flex, Stack } from '@chakra-ui/core';
-import NextLink from 'next/link';
 import { withApollo } from '../utils/withApollo';
 import PostCard from '../components/PostCard';
 
 const Index = () => {
-  const { data, loading, error, fetchMore, variables } = usePostsQuery({
+  const {
+    data,
+    loading,
+    error,
+    fetchMore,
+    variables,
+    refetch,
+    client,
+  } = usePostsQuery({
     variables: {
       limit: 15,
+      column: 'createdAt',
+      order: 'ASC',
       cursor: null,
     },
     notifyOnNetworkStatusChange: true,
+    partialRefetch: true,
   });
 
   if (!loading && !data) {
@@ -21,20 +31,6 @@ const Index = () => {
 
   return (
     <Layout>
-      <Flex align='center'>
-        <NextLink href='/create-post'>
-          <Button
-            leftIcon='add'
-            color='white'
-            backgroundColor='#3d5af1'
-            ml='auto'
-            fontSize='14px'
-            px={10}
-          >
-            Start a New Topic
-          </Button>
-        </NextLink>
-      </Flex>
       {loading && !data ? (
         <div>loading</div>
       ) : (
