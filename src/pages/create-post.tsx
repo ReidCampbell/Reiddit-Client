@@ -1,5 +1,6 @@
 import { Box, Button } from '@chakra-ui/core';
 import { Form, Formik } from 'formik';
+import { Container } from 'next/app';
 import { useRouter } from 'next/router';
 import React from 'react';
 import InputField from '../components/InputField';
@@ -14,7 +15,7 @@ const CreatePost: React.FC<{}> = ({}) => {
   const router = useRouter();
 
   return (
-    <Layout variant='small'>
+    <Container variant='small'>
       <Formik
         initialValues={{ title: '', text: '' }}
         onSubmit={async values => {
@@ -46,7 +47,7 @@ const CreatePost: React.FC<{}> = ({}) => {
           </Form>
         )}
       </Formik>
-    </Layout>
+    </Container>
   );
 };
 
