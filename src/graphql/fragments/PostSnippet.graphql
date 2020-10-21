@@ -9,6 +9,7 @@ fragment PostSnippet on Post {
   creator {
     id
     username
+    avatar
   }
   comments {
     id

@@ -1,5 +1,14 @@
-mutation CreateReply($text: String!, $commentId: Int!) {
-  createReply(text: $text, commentId: $commentId) {
+mutation CreateReply(
+  $text: String!
+  $commentId: Int!
+  $commentOrReply: String!
+) {
+  createReply(
+    text: $text
+    commentId: $commentId
+    commentOrReply: $commentOrReply
+  ) {
     text
+    commentId
   }
 }

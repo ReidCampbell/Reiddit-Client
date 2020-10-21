@@ -26,6 +26,8 @@ export type Query = {
 
 export type QueryPostsArgs = {
   cursor?: Maybe<Scalars['String']>;
+  order: Scalars['String'];
+  column: Scalars['String'];
   limit: Scalars['Int'];
 };
 
@@ -63,6 +65,7 @@ export type User = {
   updatedAt: Scalars['String'];
   username: Scalars['String'];
   email: Scalars['String'];
+  avatar?: Maybe<Scalars['String']>;
 };
 
 export type PaginatedPosts = {
@@ -106,7 +109,7 @@ export type Reply = {
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   text: Scalars['String'];
-  points: Scalars['Float'];
+  commentOrReply: Scalars['String'];
   creatorId: Scalars['Float'];
   commentId: Scalars['Float'];
   creator: User;
@@ -127,6 +130,7 @@ export type PaginatedReplies = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  uploadAvatar: Scalars['String'];
   changePassword: UserResponse;
   forgotPassword: Scalars['Boolean'];
   register: UserResponse;
@@ -142,6 +146,11 @@ export type Mutation = {
   createReply: Reply;
   updateReply?: Maybe<Reply>;
   deleteReply: Scalars['Boolean'];
+};
+
+
+export type MutationUploadAvatarArgs = {
+  avatar: Scalars['String'];
 };
 
 
@@ -208,6 +217,7 @@ export type MutationDeleteCommentArgs = {
 
 
 export type MutationCreateReplyArgs = {
+  commentOrReply: Scalars['String'];
   text: Scalars['String'];
   commentId: Scalars['Int'];
 };
@@ -251,7 +261,7 @@ export type PostSnippetFragment = (
   & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'textSnippet' | 'voteStatus'>
   & { creator: (
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'username'>
+    & Pick<User, 'id' | 'username' | 'avatar'>
   ), comments?: Maybe<Array<(
     { __typename?: 'Comment' }
     & Pick<Comment, 'id'>
@@ -269,7 +279,7 @@ export type RegularErrorFragment = (
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'username'>
+  & Pick<User, 'id' | 'username' | 'avatar'>
 );
 
 export type RegularUserResponseFragment = (
@@ -333,6 +343,7 @@ export type CreatePostMutation = (
 export type CreateReplyMutationVariables = Exact<{
   text: Scalars['String'];
   commentId: Scalars['Int'];
+  commentOrReply: Scalars['String'];
 }>;
 
 
@@ -340,7 +351,7 @@ export type CreateReplyMutation = (
   { __typename?: 'Mutation' }
   & { createReply: (
     { __typename?: 'Reply' }
-    & Pick<Reply, 'text'>
+    & Pick<Reply, 'text' | 'commentId'>
   ) }
 );
 
@@ -414,6 +425,16 @@ export type UpdatePostMutation = (
   )> }
 );
 
+export type UploadAvatarMutationVariables = Exact<{
+  avatar: Scalars['String'];
+}>;
+
+
+export type UploadAvatarMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'uploadAvatar'>
+);
+
 export type VoteMutationVariables = Exact<{
   value: Scalars['Int'];
   postId: Scalars['Int'];
@@ -448,19 +469,19 @@ export type PostQuery = (
     & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'text' | 'voteStatus'>
     & { creator: (
       { __typename?: 'User' }
-      & Pick<User, 'id' | 'username'>
+      & Pick<User, 'id' | 'username' | 'avatar'>
     ), comments?: Maybe<Array<(
       { __typename?: 'Comment' }
       & Pick<Comment, 'id' | 'text' | 'createdAt' | 'updatedAt' | 'points'>
       & { creator: (
         { __typename?: 'User' }
-        & Pick<User, 'username'>
+        & Pick<User, 'username' | 'avatar'>
       ), replies?: Maybe<Array<(
         { __typename?: 'Reply' }
         & Pick<Reply, 'id' | 'text' | 'createdAt' | 'updatedAt'>
         & { creator: (
           { __typename?: 'User' }
-          & Pick<User, 'username'>
+          & Pick<User, 'username' | 'avatar'>
         ) }
       )>> }
     )>> }
@@ -469,6 +490,8 @@ export type PostQuery = (
 
 export type PostsQueryVariables = Exact<{
   limit: Scalars['Int'];
+  column: Scalars['String'];
+  order: Scalars['String'];
   cursor?: Maybe<Scalars['String']>;
 }>;
 
@@ -497,6 +520,7 @@ export const PostSnippetFragmentDoc = gql`
   creator {
     id
     username
+    avatar
   }
   comments {
     id
@@ -516,6 +540,7 @@ export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
   id
   username
+  avatar
 }
     `;
 export const RegularUserResponseFragmentDoc = gql`
@@ -640,9 +665,10 @@ export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutati
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
 export const CreateReplyDocument = gql`
-    mutation CreateReply($text: String!, $commentId: Int!) {
-  createReply(text: $text, commentId: $commentId) {
+    mutation CreateReply($text: String!, $commentId: Int!, $commentOrReply: String!) {
+  createReply(text: $text, commentId: $commentId, commentOrReply: $commentOrReply) {
     text
+    commentId
   }
 }
     `;
@@ -663,6 +689,7 @@ export type CreateReplyMutationFn = Apollo.MutationFunction<CreateReplyMutation,
  *   variables: {
  *      text: // value for 'text'
  *      commentId: // value for 'commentId'
+ *      commentOrReply: // value for 'commentOrReply'
  *   },
  * });
  */
@@ -863,6 +890,36 @@ export function useUpdatePostMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdatePostMutationHookResult = ReturnType<typeof useUpdatePostMutation>;
 export type UpdatePostMutationResult = Apollo.MutationResult<UpdatePostMutation>;
 export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;
+export const UploadAvatarDocument = gql`
+    mutation uploadAvatar($avatar: String!) {
+  uploadAvatar(avatar: $avatar)
+}
+    `;
+export type UploadAvatarMutationFn = Apollo.MutationFunction<UploadAvatarMutation, UploadAvatarMutationVariables>;
+
+/**
+ * __useUploadAvatarMutation__
+ *
+ * To run a mutation, you first call `useUploadAvatarMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadAvatarMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadAvatarMutation, { data, loading, error }] = useUploadAvatarMutation({
+ *   variables: {
+ *      avatar: // value for 'avatar'
+ *   },
+ * });
+ */
+export function useUploadAvatarMutation(baseOptions?: Apollo.MutationHookOptions<UploadAvatarMutation, UploadAvatarMutationVariables>) {
+        return Apollo.useMutation<UploadAvatarMutation, UploadAvatarMutationVariables>(UploadAvatarDocument, baseOptions);
+      }
+export type UploadAvatarMutationHookResult = ReturnType<typeof useUploadAvatarMutation>;
+export type UploadAvatarMutationResult = Apollo.MutationResult<UploadAvatarMutation>;
+export type UploadAvatarMutationOptions = Apollo.BaseMutationOptions<UploadAvatarMutation, UploadAvatarMutationVariables>;
 export const VoteDocument = gql`
     mutation Vote($value: Int!, $postId: Int!) {
   vote(value: $value, postId: $postId)
@@ -939,6 +996,7 @@ export const PostDocument = gql`
     creator {
       id
       username
+      avatar
     }
     comments {
       id
@@ -948,6 +1006,7 @@ export const PostDocument = gql`
       points
       creator {
         username
+        avatar
       }
       replies {
         id
@@ -956,6 +1015,7 @@ export const PostDocument = gql`
         updatedAt
         creator {
           username
+          avatar
         }
       }
     }
@@ -989,8 +1049,8 @@ export type PostQueryHookResult = ReturnType<typeof usePostQuery>;
 export type PostLazyQueryHookResult = ReturnType<typeof usePostLazyQuery>;
 export type PostQueryResult = Apollo.QueryResult<PostQuery, PostQueryVariables>;
 export const PostsDocument = gql`
-    query Posts($limit: Int!, $cursor: String) {
-  posts(cursor: $cursor, limit: $limit) {
+    query Posts($limit: Int!, $column: String!, $order: String!, $cursor: String) {
+  posts(cursor: $cursor, column: $column, order: $order, limit: $limit) {
     hasMore
     posts {
       ...PostSnippet
@@ -1012,6 +1072,8 @@ export const PostsDocument = gql`
  * const { data, loading, error } = usePostsQuery({
  *   variables: {
  *      limit: // value for 'limit'
+ *      column: // value for 'column'
+ *      order: // value for 'order'
  *      cursor: // value for 'cursor'
  *   },
  * });
