@@ -3,7 +3,7 @@ import { Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import React from 'react';
 import InputField from '../../../components/InputField';
-import Layout from '../../../components/Layout';
+import Container from '../../../components/Container';
 import {
   usePostQuery,
   useUpdatePostMutation,
@@ -24,22 +24,22 @@ const EditPost = ({}) => {
 
   if (loading) {
     return (
-      <Layout>
+      <Container>
         <div>Loading...</div>
-      </Layout>
+      </Container>
     );
   }
 
   if (!data?.post) {
     return (
-      <Layout>
+      <Container>
         <Box>Could not find post</Box>
-      </Layout>
+      </Container>
     );
   }
 
   return (
-    <Layout variant='small'>
+    <Container variant='small'>
       <Formik
         initialValues={{ title: data.post.title, text: data.post.text }}
         onSubmit={async values => {
@@ -64,7 +64,7 @@ const EditPost = ({}) => {
           </Form>
         )}
       </Formik>
-    </Layout>
+    </Container>
   );
 };
 
