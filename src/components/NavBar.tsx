@@ -1,14 +1,27 @@
 import React from 'react';
-import { Box, Link, Flex, Button, Heading, Avatar } from '@chakra-ui/core';
+import {
+  Box,
+  Link,
+  Flex,
+  Button,
+  Avatar,
+  Image,
+  MenuButton,
+  Menu,
+  MenuItem,
+  MenuList,
+} from '@chakra-ui/core';
 import NextLink from 'next/link';
 import { useLogoutMutation, useMeQuery } from '../generated/graphql';
 import { isServer } from '../utils/isServer';
 import { useApolloClient } from '@apollo/client';
+import { useRouter } from 'next/router';
 
 interface NavBarProps {}
 
 const NavBar: React.FC<NavBarProps> = ({}) => {
   const apolloClient = useApolloClient();
+  const router = useRouter();
   const [logout, { loading: logoutLoading }] = useLogoutMutation();
   const { data, loading } = useMeQuery({
     skip: isServer(),
@@ -30,31 +43,39 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
   } else {
     body = (
       <Flex>
-        {/* <NextLink href='/create-post'> */}
-        <Avatar size='sm' />
-        {/* </NextLink> */}
-        {/* <Button
-          variant='link'
-          onClick={async () => {
-            await logout();
-            await apolloClient.resetStore();
-          }}
-          isLoading={logoutLoading}
-        >
-          Logout
-        </Button> */}
+        <Menu>
+          <MenuButton>
+            <Avatar size='sm' src={data.me.avatar ? data.me.avatar : ''} />
+          </MenuButton>
+          <MenuList>
+            <MenuItem onClick={() => router.push('/user')}>
+              Profile Page
+            </MenuItem>
+            <MenuItem
+              onClick={async () => {
+                await logout();
+                await apolloClient.resetStore();
+                router.push('/');
+              }}
+            >
+              Logout
+            </MenuItem>
+          </MenuList>
+        </Menu>
       </Flex>
     );
   }
   return (
-    <Box bg='white' boxShadow='lg' p={4} position='sticky' top={0} zIndex={1}>
-      <Flex mx='auto' maxWidth='800px' align='center'>
-        <NextLink href='/'>
-          <Heading cursor='pointer'>REIDDIT</Heading>
-        </NextLink>
-        <Box ml='auto'>{body}</Box>
-      </Flex>
-    </Box>
+    <>
+      <Box bg='white' boxShadow='lg' p={4} position='sticky' top={0} zIndex={1}>
+        <Flex mx='auto' maxWidth='800px' align='center'>
+          <NextLink href='/'>
+            <Image src='/Reidditlogo.png' h='50px' cursor='pointer' />
+          </NextLink>
+          <Box ml='auto'>{body}</Box>
+        </Flex>
+      </Box>
+    </>
   );
 };
 
