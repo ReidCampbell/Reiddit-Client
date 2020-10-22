@@ -1,7 +1,7 @@
 import React from 'react';
 import Layout from '../components/Layout';
 import { usePostsQuery } from '../generated/graphql';
-import { Button, Flex, Stack } from '@chakra-ui/core';
+import { Button, Flex, Spinner, Stack } from '@chakra-ui/core';
 import { withApollo } from '../utils/withApollo';
 import PostCard from '../components/PostCard';
 
@@ -32,7 +32,15 @@ const Index = () => {
   return (
     <Layout client={client} refetch={refetch}>
       {loading && !data ? (
-        <div>loading</div>
+        <Flex w='60vw' justify='center' align='center'>
+          <Spinner
+            thickness='4px'
+            speed='0.65s'
+            emptyColor='gray.200'
+            color='blue.500'
+            size='xl'
+          />
+        </Flex>
       ) : (
         <Stack>
           {data!.posts.posts.map(post =>
