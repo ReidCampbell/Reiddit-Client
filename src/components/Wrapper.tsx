@@ -26,7 +26,7 @@ const Wrapper: React.FC<WrapperProps> = ({ client, refetch, children }) => {
   return (
     <SimpleGrid columns={[1, 1, 3, 3]} mt={6} justifyContent='center'>
       {!isTabletOrMobile && (
-        <Flex justify='center' mt='22px'>
+        <Flex justify='flex-end' mt='22px'>
           <List w='75%' spacing={1}>
             <Flex>
               <Text ml='2.3rem' mb={2} color='#aaaaaa'>
