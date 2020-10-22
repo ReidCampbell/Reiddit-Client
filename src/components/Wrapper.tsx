@@ -12,9 +12,10 @@ import {
 import NextLink from 'next/link';
 import { MdFiberNew, MdWhatshot } from 'react-icons/md';
 import { useMediaQuery } from 'react-responsive';
+import { ApolloClient } from '@apollo/client';
 
-interface WrapperProps {
-  client: any;
+export interface WrapperProps {
+  client: ApolloClient<any>;
   refetch: any;
 }
 
