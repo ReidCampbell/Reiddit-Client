@@ -26,57 +26,93 @@ const Wrapper: React.FC<WrapperProps> = ({ client, refetch, children }) => {
   return (
     <SimpleGrid columns={[1, 1, 3, 3]} mt={6} justifyContent='center'>
       {!isTabletOrMobile && (
-        <Box mt='22px'>
-          <List w='100%'>
-            <Flex justify='flex-end'>
-              <Text color='#aaaaaa'>Menu</Text>
+        <Flex justify='center' mt='22px'>
+          <List w='75%' spacing={1}>
+            <Flex>
+              <Text ml='2.3rem' mb={2} color='#aaaaaa'>
+                Menu
+              </Text>
             </Flex>
             <ListItem>
-              <PseudoBox
-                as='button'
-                onClick={() => {
-                  if (sort === 'new') return;
-                  setSort('new');
-                  refetch({
-                    limit: 15,
-                    column: 'createdAt',
-                    order: 'DESC',
-                    cursor: null,
-                  });
-                  client.resetStore();
-                }}
-                w='100%'
-              >
-                <Flex align='center' justify='flex-end'>
-                  <Box as={MdFiberNew} color='#aaaaaa' />
-                  <Text color='#aaaaaa'>New</Text>
-                </Flex>
-              </PseudoBox>
+              <Flex>
+                <Box
+                  backgroundColor={sort === 'top' ? '#3d5af1' : ''}
+                  w='5px'
+                />
+                <PseudoBox
+                  as='button'
+                  onClick={() => {
+                    if (sort === 'top') return;
+                    setSort('top');
+                    refetch({
+                      limit: 15,
+                      column: 'points',
+                      order: 'DESC',
+                      cursor: null,
+                    });
+                    client.resetStore();
+                  }}
+                  w='100%'
+                  pl={2}
+                  backgroundColor={sort === 'top' ? '#e8ebfb' : ''}
+                >
+                  <Flex align='center'>
+                    <Box
+                      as={MdWhatshot}
+                      color={sort === 'top' ? '#3d5af1' : '#aaaaaa'}
+                    />
+                    <Text
+                      color={sort === 'top' ? '#3d5af1' : '#aaaaaa'}
+                      ml={2}
+                      py='0.25rem'
+                    >
+                      Top
+                    </Text>
+                  </Flex>
+                </PseudoBox>
+              </Flex>
             </ListItem>
             <ListItem>
-              <PseudoBox
-                as='button'
-                onClick={() => {
-                  if (sort === 'top') return;
-                  setSort('top');
-                  refetch({
-                    limit: 15,
-                    column: 'points',
-                    order: 'DESC',
-                    cursor: null,
-                  });
-                  client.resetStore();
-                }}
-                w='100%'
-              >
-                <Flex align='center' justify='flex-end'>
-                  <Box as={MdWhatshot} color='#aaaaaa' />
-                  <Text color='#aaaaaa'>Top</Text>
-                </Flex>
-              </PseudoBox>
+              <Flex>
+                <Box
+                  backgroundColor={sort === 'new' ? '#3d5af1' : ''}
+                  w='5px'
+                />
+                <PseudoBox
+                  as='button'
+                  onClick={() => {
+                    if (sort === 'new') return;
+                    setSort('new');
+                    refetch({
+                      limit: 15,
+                      column: 'createdAt',
+                      order: 'DESC',
+                      cursor: null,
+                    });
+                    client.resetStore();
+                  }}
+                  w='100%'
+                  pl={2}
+                  backgroundColor={sort === 'new' ? '#e8ebfb' : ''}
+                >
+                  <Flex align='center'>
+                    <Box
+                      as={MdFiberNew}
+                      color={sort === 'new' ? '#3d5af1' : '#aaaaaa'}
+                    />
+                    <Text
+                      color={sort === 'new' ? '#3d5af1' : '#aaaaaa'}
+                      ml={2}
+                      py='0.25rem'
+                    >
+                      New
+                    </Text>
+                  </Flex>
+                </PseudoBox>
+              </Flex>
             </ListItem>
           </List>
-        </Box>
+        </Flex>
       )}
       {children}
       {!isTabletOrMobile && (
