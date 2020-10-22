@@ -3,7 +3,7 @@ import { Formik, Form } from 'formik';
 import { Button, Box, Link, Flex } from '@chakra-ui/core';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
-import Wrapper from '../components/Wrapper';
+import Container from '../components/Container';
 import InputField from '../components/InputField';
 import { MeDocument, MeQuery, useLoginMutation } from '../generated/graphql';
 import { toErrorMap } from '../utils/toErrorMap';
@@ -13,7 +13,7 @@ const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
   const [login] = useLoginMutation();
   return (
-    <Wrapper variant='small'>
+    <Container variant='small'>
       <Formik
         initialValues={{ usernameOrEmail: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {
@@ -67,7 +67,7 @@ const Login: React.FC<{}> = ({}) => {
           </Form>
         )}
       </Formik>
-    </Wrapper>
+    </Container>
   );
 };
 

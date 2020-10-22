@@ -258,7 +258,7 @@ export type PostInput = {
 
 export type PostSnippetFragment = (
   { __typename?: 'Post' }
-  & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'textSnippet' | 'voteStatus'>
+  & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'textSnippet' | 'voteStatus' | 'creatorId'>
   & { creator: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username' | 'avatar'>
@@ -522,6 +522,7 @@ export const PostSnippetFragmentDoc = gql`
     username
     avatar
   }
+  creatorId
   comments {
     id
     replies {

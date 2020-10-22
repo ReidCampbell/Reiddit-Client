@@ -5,7 +5,7 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import InputField from '../../components/InputField';
-import Wrapper from '../../components/Wrapper';
+import Container from '../../components/Container';
 import {
   MeDocument,
   MeQuery,
@@ -19,7 +19,7 @@ const ChangePassword: NextPage = () => {
   const router = useRouter();
   const [tokenError, setTokenError] = useState('');
   return (
-    <Wrapper variant='small'>
+    <Container variant='small'>
       <Formik
         initialValues={{ newPassword: '' }}
         onSubmit={async (values, { setErrors }) => {
@@ -74,7 +74,7 @@ const ChangePassword: NextPage = () => {
           </Form>
         )}
       </Formik>
-    </Wrapper>
+    </Container>
   );
 };
 

@@ -1,16 +1,8 @@
 import React from 'react';
 import Container from '../../components/Container';
-import { Box, Button } from '@chakra-ui/core';
+import { Box } from '@chakra-ui/core';
 import { useGetPostFromUrl } from '../../utils/useGetPostsFromUrl';
 import { withApollo } from '../../utils/withApollo';
-import {
-  useCreateCommentMutation,
-  PostDocument,
-} from '../../generated/graphql';
-import { Formik, Form } from 'formik';
-import InputField from '../../components/InputField';
-import { useRouter } from 'next/router';
-import { useGetIntId } from '../../utils/useGetIntId';
 import CommentCard from '../../components/CommentCard';
 import PostCard from '../../components/PostCard';
 

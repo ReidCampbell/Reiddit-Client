@@ -3,7 +3,6 @@ import {
   Box,
   Link,
   Flex,
-  Button,
   Avatar,
   Image,
   MenuButton,
@@ -22,7 +21,7 @@ interface NavBarProps {}
 const NavBar: React.FC<NavBarProps> = ({}) => {
   const apolloClient = useApolloClient();
   const router = useRouter();
-  const [logout, { loading: logoutLoading }] = useLogoutMutation();
+  const [logout] = useLogoutMutation();
   const { data, loading } = useMeQuery({
     skip: isServer(),
   });

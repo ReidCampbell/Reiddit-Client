@@ -1,12 +1,4 @@
-import {
-  Text,
-  Flex,
-  Box,
-  Avatar,
-  Button,
-  IconButton,
-  Textarea,
-} from '@chakra-ui/core';
+import { Text, Flex, Box, Avatar, IconButton } from '@chakra-ui/core';
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import { Formik, Form } from 'formik';

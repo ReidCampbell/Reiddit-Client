@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Layout from '../components/Layout';
 import { usePostsQuery } from '../generated/graphql';
 import { Button, Flex, Stack } from '@chakra-ui/core';
@@ -17,8 +17,8 @@ const Index = () => {
   } = usePostsQuery({
     variables: {
       limit: 15,
-      column: 'createdAt',
-      order: 'ASC',
+      column: 'points',
+      order: 'DESC',
       cursor: null,
     },
     notifyOnNetworkStatusChange: true,
@@ -30,7 +30,7 @@ const Index = () => {
   }
 
   return (
-    <Layout>
+    <Layout client={client} refetch={refetch}>
       {loading && !data ? (
         <div>loading</div>
       ) : (

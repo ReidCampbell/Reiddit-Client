@@ -1,6 +1,5 @@
-import { Box, Button, Flex, IconButton, Textarea } from '@chakra-ui/core';
+import { Box, Flex, IconButton } from '@chakra-ui/core';
 import { Formik, Form } from 'formik';
-import { useRouter } from 'next/router';
 import React from 'react';
 import { RiMailSendLine } from 'react-icons/ri';
 import { PostDocument, useCreateCommentMutation } from '../generated/graphql';
@@ -15,7 +14,6 @@ const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
   setReplyOpen,
 }) => {
   const [createComment] = useCreateCommentMutation();
-  const router = useRouter();
   const intId = useGetIntId();
 
   return (

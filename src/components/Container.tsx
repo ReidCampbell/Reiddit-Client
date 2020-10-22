@@ -2,10 +2,10 @@ import React from 'react';
 import { Box } from '@chakra-ui/core';
 import NavBar from './NavBar';
 
-export type WrapperVariant = 'small' | 'regular';
+export type ContainerVariant = 'small' | 'regular';
 
 interface ContainerProps {
-  variant?: WrapperVariant;
+  variant?: ContainerVariant;
 }
 
 const Container: React.FC<ContainerProps> = ({

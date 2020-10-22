@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button } from '@chakra-ui/core';
 import { Formik, Form } from 'formik';
 import InputField from '../components/InputField';
-import Wrapper from '../components/Wrapper';
+import Container from '../components/Container';
 import { useForgotPasswordMutation } from '../generated/graphql';
 import { withApollo } from '../utils/withApollo';
 
@@ -11,7 +11,7 @@ const ForgotPassword: React.FC<{}> = ({}) => {
   const [forgotPassword] = useForgotPasswordMutation();
 
   return (
-    <Wrapper variant='small'>
+    <Container variant='small'>
       <Formik
         initialValues={{ email: '' }}
         onSubmit={async values => {
@@ -39,7 +39,7 @@ const ForgotPassword: React.FC<{}> = ({}) => {
           )
         }
       </Formik>
-    </Wrapper>
+    </Container>
   );
 };
 

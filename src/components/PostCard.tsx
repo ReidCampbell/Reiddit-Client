@@ -1,13 +1,4 @@
-import {
-  Text,
-  Flex,
-  Box,
-  Link,
-  Heading,
-  Avatar,
-  Icon,
-  Button,
-} from '@chakra-ui/core';
+import { Text, Flex, Box, Link, Heading, Avatar, Icon } from '@chakra-ui/core';
 import React, { useState } from 'react';
 import UpdootSection from './UpdootSection';
 import NextLink from 'next/link';
@@ -16,19 +7,11 @@ import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { EditDeletePostButtons } from './EditDeletePostButtons';
-import {
-  Post,
-  PostDocument,
-  useCreateCommentMutation,
-} from '../generated/graphql';
-import { Formik, Form } from 'formik';
-import InputField from './InputField';
-import { useGetIntId } from '../utils/useGetIntId';
 import CreateCommentForm from './CreateCommentForm';
 
 interface PostsCardProps {
-  post: Post;
-  postIsOpen: boolean;
+  post: any;
+  postIsOpen?: boolean;
 }
 
 const PostsCard: React.FC<PostsCardProps> = ({
@@ -37,9 +20,7 @@ const PostsCard: React.FC<PostsCardProps> = ({
   children,
 }) => {
   const [replyOpen, setReplyOpen] = useState(false);
-  const [createComment] = useCreateCommentMutation();
   const router = useRouter();
-  const intId = useGetIntId();
 
   dayjs.extend(relativeTime);
   const postTime = dayjs().to(parseInt(post.createdAt));
@@ -62,6 +43,7 @@ const PostsCard: React.FC<PostsCardProps> = ({
       mx={5}
       p={5}
       shadow='lg'
+      minWidth='60vw'
       borderRadius='12px'
       onDoubleClick={() =>
         router.push({

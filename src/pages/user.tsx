@@ -3,13 +3,11 @@ import Container from '../components/Container';
 import { Box, Heading } from '@chakra-ui/core';
 import { withApollo } from '../utils/withApollo';
 import { useMeQuery, useUploadAvatarMutation } from '../generated/graphql';
-import { useDropzone } from 'react-dropzone';
 import NavBar from '../components/NavBar';
 
 const User: React.FC = ({}) => {
   const { data, loading } = useMeQuery();
   const [uploadAvatar] = useUploadAvatarMutation();
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 
   if (loading) {
     return (
