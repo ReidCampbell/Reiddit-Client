@@ -1,2 +1,2 @@
-# Reiddit-Client
-# Reiddit-Server
+# Kandan
+# Kandan
