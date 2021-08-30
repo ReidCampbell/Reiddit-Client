@@ -1,26 +1,26 @@
-import { Box, Button, Flex, Link } from '@chakra-ui/core';
-import { Form, Formik } from 'formik';
-import { NextPage } from 'next';
-import NextLink from 'next/link';
-import { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import InputField from '../../components/InputField';
-import Container from '../../components/Container';
-import {
-  MeDocument,
-  MeQuery,
-  useChangePasswordMutation,
-} from '../../generated/graphql';
-import { toErrorMap } from '../../utils/toErrorMap';
-import { withApollo } from '../../utils/withApollo';
+import { Box, Button, Flex, Link } from "@chakra-ui/core";
+import { Form, Formik } from "formik";
+import { NextPage } from "next";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import InputField from "../../components/InputField";
+import Container from "../../components/Container";
+// import {
+//   MeDocument,
+//   MeQuery,
+//   useChangePasswordMutation
+// } from "../../generated/graphql";
+import { toErrorMap } from "../../utils/toErrorMap";
+import { withApollo } from "../../utils/withApollo";
 
 const ChangePassword: NextPage = () => {
-  const [ChangePassword] = useChangePasswordMutation();
+  // const [ChangePassword] = useChangePasswordMutation();
   const router = useRouter();
-  const [tokenError, setTokenError] = useState('');
+  const [tokenError, setTokenError] = useState("");
   return (
-    <Container variant='small'>
-      <Formik
+    <Container variant="small">
+      {/* <Formik
         initialValues={{ newPassword: '' }}
         onSubmit={async (values, { setErrors }) => {
           const response = await ChangePassword({
@@ -73,7 +73,7 @@ const ChangePassword: NextPage = () => {
             </Button>
           </Form>
         )}
-      </Formik>
+      </Formik> */}
     </Container>
   );
 };

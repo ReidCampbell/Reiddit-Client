@@ -1,24 +1,24 @@
-import { Box, Button } from '@chakra-ui/core';
-import { Form, Formik } from 'formik';
-import { useRouter } from 'next/router';
-import React from 'react';
-import InputField from '../../../components/InputField';
-import Container from '../../../components/Container';
+import { Box, Button } from "@chakra-ui/core";
+import { Form, Formik } from "formik";
+import { useRouter } from "next/router";
+import React from "react";
+import InputField from "../../../components/InputField";
+import Container from "../../../components/Container";
 import {
-  usePostQuery,
-  useUpdatePostMutation,
-} from '../../../generated/graphql';
-import { useGetIntId } from '../../../utils/useGetIntId';
-import { withApollo } from '../../../utils/withApollo';
+  useGetPostQuery,
+  useUpdatePostMutation
+} from "../../../generated/graphql";
+import { useGetPostId } from "../../../utils/useGetIntId";
+import { withApollo } from "../../../utils/withApollo";
 
 const EditPost = ({}) => {
   const router = useRouter();
-  const intId = useGetIntId();
-  const { data, loading } = usePostQuery({
-    skip: intId === -1,
+  const postID = useGetPostId();
+  const { data, loading } = useGetPostQuery({
+    skip: !postID,
     variables: {
-      id: intId,
-    },
+      id: postID
+    }
   });
   const [updatePost] = useUpdatePostMutation();
 
@@ -30,7 +30,7 @@ const EditPost = ({}) => {
     );
   }
 
-  if (!data?.post) {
+  if (!data?.getPost) {
     return (
       <Container>
         <Box>Could not find post</Box>
@@ -39,26 +39,29 @@ const EditPost = ({}) => {
   }
 
   return (
-    <Container variant='small'>
+    <Container variant="small">
       <Formik
-        initialValues={{ title: data.post.title, text: data.post.text }}
+        initialValues={{
+          title: data.getPost.title,
+          content: data.getPost.content
+        }}
         onSubmit={async values => {
-          await updatePost({ variables: { id: intId, ...values } });
+          await updatePost({ variables: { input: { id: postID, ...values } } });
           router.back();
         }}
       >
         {({ isSubmitting }) => (
           <Form>
-            <InputField name='title' placeholder='title' label='Title' />
+            <InputField name="title" placeholder="title" label="Title" />
             <Box mt={4}>
               <InputField
                 textarea
-                name='text'
-                placeholder='text...'
-                label='Body'
+                name="content"
+                placeholder="text..."
+                label="Body"
               />
             </Box>
-            <Button mt={4} type='submit' isLoading={isSubmitting}>
+            <Button mt={4} type="submit" isLoading={isSubmitting}>
               Update Post
             </Button>
           </Form>

@@ -1,13 +1,13 @@
-import { Text, Flex, Box, Link, Heading, Avatar, Icon } from '@chakra-ui/core';
-import React, { useState } from 'react';
-import UpdootSection from './UpdootSection';
-import NextLink from 'next/link';
-import { Divider } from '@chakra-ui/core';
-import dayjs from 'dayjs';
-import { useRouter } from 'next/router';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import { EditDeletePostButtons } from './EditDeletePostButtons';
-import CreateCommentForm from './CreateCommentForm';
+import { Text, Flex, Box, Link, Heading, Avatar, Icon } from "@chakra-ui/core";
+import React, { useState } from "react";
+import UpdootSection from "./UpdootSection";
+import NextLink from "next/link";
+import { Divider } from "@chakra-ui/core";
+import dayjs from "dayjs";
+import { useRouter } from "next/router";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { EditDeletePostButtons } from "./EditDeletePostButtons";
+import CreateCommentForm from "./CreateCommentForm";
 
 interface PostsCardProps {
   post: any;
@@ -17,7 +17,7 @@ interface PostsCardProps {
 const PostsCard: React.FC<PostsCardProps> = ({
   post,
   postIsOpen,
-  children,
+  children
 }) => {
   const [replyOpen, setReplyOpen] = useState(false);
   const router = useRouter();
@@ -38,25 +38,26 @@ const PostsCard: React.FC<PostsCardProps> = ({
 
   return (
     <Flex
-      backgroundColor='white'
+      backgroundColor="white"
       my={22}
       mx={5}
       p={5}
-      shadow='lg'
-      minWidth='60vw'
-      borderRadius='12px'
+      shadow="lg"
+      minWidth="456px"
+      // maxWidth="60vw"
+      borderRadius="12px"
       onDoubleClick={() =>
         router.push({
-          pathname: `/post/${post.id}`,
+          pathname: `/post/${post.id}`
         })
       }
     >
       <UpdootSection post={post} />
-      <Box px='2rem' flex={1}>
-        <Flex justify='space-between'>
-          <NextLink href='/post/[id]' as={`/post/${post.id}`}>
+      <Box px="2rem" flex={1}>
+        <Flex justify="space-between">
+          <NextLink href="/post/[id]" as={`/post/${post.id}`}>
             <Link>
-              <Heading color='#444444' fontSize='xl'>
+              <Heading color="#444444" fontSize="xl">
                 {post.title}
               </Heading>
             </Link>
@@ -67,33 +68,33 @@ const PostsCard: React.FC<PostsCardProps> = ({
             )}
           </Box>
         </Flex>
-        <Flex align='center'>
-          <Text color='#959595' flex={1} mt={4}>
+        <Flex align="center">
+          <Text color="#959595" flex={1} mt={4}>
             {post.text ? post.text : post.textSnippet}
           </Text>
         </Flex>
-        <Divider mt={4} borderColor='#aaaaaa' />
-        <Flex mt={4} justify='space-between'>
-          <Flex align='center'>
+        <Divider mt={4} borderColor="#aaaaaa" />
+        <Flex mt={4} justify="space-between">
+          <Flex align="center">
             <Avatar
-              size='xs'
+              size="xs"
               mr={4}
-              src={post.creator.avatar ? post.creator.avatar : ''}
+              src={post.creator.avatar ? post.creator.avatar : ""}
             />
-            <Text fontSize='sm' color='#aaaaaa' mr={15}>
-              Posted by{' '}
-              <Box as='span' color='#3d5af1' fontSize='sm'>
+            <Text fontSize="sm" color="#aaaaaa" mr={15}>
+              Posted by{" "}
+              <Box as="span" color="#3d5af1" fontSize="sm">
                 {post.creator.username}
               </Box>
             </Text>
-            <Text fontSize='xs' color='#aaaaaa'>
+            <Text fontSize="xs" color="#aaaaaa">
               {postTime}
             </Text>
           </Flex>
-          <Flex align='baseline'>
-            <Icon name='chat' size='12px' mr={1} color='#aaaaaa' />
-            <Text fontSize='14px' color='#aaaaaa'>
-              {calculateComments()}
+          <Flex align="center">
+            <Icon name="chat" size="12px" mr={1} color="#aaaaaa" />
+            <Text fontSize="14px" color="#aaaaaa">
+              {/* {calculateComments()} */}
             </Text>
           </Flex>
         </Flex>
@@ -102,9 +103,9 @@ const PostsCard: React.FC<PostsCardProps> = ({
             onClick={() => {
               setReplyOpen(!replyOpen);
             }}
-            fontSize='sm'
-            color='#aaaaaa'
-            cursor='pointer'
+            fontSize="sm"
+            color="#aaaaaa"
+            cursor="pointer"
             mt={2}
           >
             Reply

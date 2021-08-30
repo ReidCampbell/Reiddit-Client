@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { Box, Button } from '@chakra-ui/core';
-import { Formik, Form } from 'formik';
-import InputField from '../components/InputField';
-import Container from '../components/Container';
-import { useForgotPasswordMutation } from '../generated/graphql';
-import { withApollo } from '../utils/withApollo';
+import React, { useState } from "react";
+import { Box, Button } from "@chakra-ui/core";
+import { Formik, Form } from "formik";
+import InputField from "../components/InputField";
+import Container from "../components/Container";
+// import { useForgotPasswordMutation } from '../generated/graphql';
+import { withApollo } from "../utils/withApollo";
 
 const ForgotPassword: React.FC<{}> = ({}) => {
   const [complete, setComplete] = useState(false);
-  const [forgotPassword] = useForgotPasswordMutation();
+  // const [forgotPassword] = useForgotPasswordMutation();
 
   return (
-    <Container variant='small'>
-      <Formik
+    <Container variant="small">
+      {/* <Formik
         initialValues={{ email: '' }}
         onSubmit={async values => {
           await forgotPassword({ variables: values });
@@ -38,7 +38,7 @@ const ForgotPassword: React.FC<{}> = ({}) => {
             </Form>
           )
         }
-      </Formik>
+      </Formik> */}
     </Container>
   );
 };

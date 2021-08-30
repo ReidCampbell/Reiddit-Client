@@ -1,21 +1,21 @@
-import React from 'react';
-import { Formik, Form } from 'formik';
-import { Button, Box } from '@chakra-ui/core';
-import { useRouter } from 'next/router';
-import Container from '../components/Container';
-import InputField from '../components/InputField';
-import { MeDocument, MeQuery, useRegisterMutation } from '../generated/graphql';
-import { toErrorMap } from '../utils/toErrorMap';
-import { withApollo } from '../utils/withApollo';
+import React from "react";
+import { Formik, Form } from "formik";
+import { Button, Box } from "@chakra-ui/core";
+import { useRouter } from "next/router";
+import Container from "../components/Container";
+import InputField from "../components/InputField";
+// import { MeDocument, MeQuery, useRegisterMutation } from '../generated/graphql';
+import { toErrorMap } from "../utils/toErrorMap";
+import { withApollo } from "../utils/withApollo";
 
 interface registerProps {}
 
 const Register: React.FC<registerProps> = ({}) => {
   const router = useRouter();
-  const [register] = useRegisterMutation();
+  // const [register] = useRegisterMutation();
   return (
-    <Container variant='small'>
-      <Formik
+    <Container variant="small">
+      {/* <Formik
         initialValues={{ email: '', username: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {
           const response = await register({
@@ -65,7 +65,7 @@ const Register: React.FC<registerProps> = ({}) => {
             </Button>
           </Form>
         )}
-      </Formik>
+      </Formik> */}
     </Container>
   );
 };

@@ -1,51 +1,51 @@
-import React from 'react';
-import { Box, IconButton, Link } from '@chakra-ui/core';
-import NextLink from 'next/link';
-import { useDeletePostMutation, useMeQuery } from '../generated/graphql';
-import { Tooltip } from '@chakra-ui/core';
+import React from "react";
+import { Box, IconButton, Link } from "@chakra-ui/core";
+import NextLink from "next/link";
+import { useDeletePostMutation } from "../generated/graphql";
+import { Tooltip } from "@chakra-ui/core";
 
 interface EditDeletePostButtonsProps {
-  id: number;
+  id: string;
   creatorId: number;
 }
 
 export const EditDeletePostButtons: React.FC<EditDeletePostButtonsProps> = ({
   id,
-  creatorId,
+  creatorId
 }) => {
-  const { data: meData } = useMeQuery();
+  // const { data: meData } = useMeQuery();
   const [deletePost] = useDeletePostMutation();
-  if (meData?.me?.id !== creatorId) {
-    return null;
-  }
+  // if (meData?.me?.id !== creatorId) {
+  //   return null;
+  // }
 
   return (
     <Box>
-      <NextLink href='/post/edit/[id]' as={`/post/edit/${id}`}>
-        <Tooltip label='Edit Post' aria-label='Edit Post'>
+      <Tooltip label="Edit Post" aria-label="Edit Post">
+        <NextLink href="/post/edit/[id]" as={`/post/edit/${id}`}>
           <IconButton
             as={Link}
-            icon='edit'
-            aria-label='Edit Post'
-            variant='link'
-            size='sm'
-            color='#aaaaaa'
+            icon="edit"
+            aria-label="Edit Post"
+            variant="link"
+            size="sm"
+            color="#aaaaaa"
           />
-        </Tooltip>
-      </NextLink>
-      <Tooltip label='Delete Post' aria-label='Delete Post'>
+        </NextLink>
+      </Tooltip>
+      <Tooltip label="Delete Post" aria-label="Delete Post">
         <IconButton
-          icon='delete'
-          aria-label='Delete Post'
-          variant='link'
-          size='sm'
-          color='#aaaaaa'
+          icon="delete"
+          aria-label="Delete Post"
+          variant="link"
+          size="sm"
+          color="#aaaaaa"
           onClick={() => {
             deletePost({
-              variables: { id },
+              variables: { input: { id } },
               update: cache => {
-                cache.evict({ id: 'Post:' + id });
-              },
+                cache.evict({ id: "Post:" + id });
+              }
             });
           }}
         />

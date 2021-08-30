@@ -1,20 +1,20 @@
-import React from 'react';
-import { Formik, Form } from 'formik';
-import { Button, Box, Link, Flex } from '@chakra-ui/core';
-import { useRouter } from 'next/router';
-import NextLink from 'next/link';
-import Container from '../components/Container';
-import InputField from '../components/InputField';
-import { MeDocument, MeQuery, useLoginMutation } from '../generated/graphql';
-import { toErrorMap } from '../utils/toErrorMap';
-import { withApollo } from '../utils/withApollo';
+import React from "react";
+import { Formik, Form } from "formik";
+import { Button, Box, Link, Flex } from "@chakra-ui/core";
+import { useRouter } from "next/router";
+import NextLink from "next/link";
+import Container from "../components/Container";
+import InputField from "../components/InputField";
+// import { MeDocument, MeQuery, useLoginMutation } from '../generated/graphql';
+import { toErrorMap } from "../utils/toErrorMap";
+import { withApollo } from "../utils/withApollo";
 
 const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
-  const [login] = useLoginMutation();
+  // const [login] = useLoginMutation();
   return (
-    <Container variant='small'>
-      <Formik
+    <Container variant="small">
+      {/* <Formik
         initialValues={{ usernameOrEmail: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {
           const response = await login({
@@ -66,7 +66,7 @@ const Login: React.FC<{}> = ({}) => {
             </Button>
           </Form>
         )}
-      </Formik>
+      </Formik> */}
     </Container>
   );
 };

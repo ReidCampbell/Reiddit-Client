@@ -1,12 +1,15 @@
-import { Text, Flex, Box, Avatar, IconButton } from '@chakra-ui/core';
-import React, { useState } from 'react';
-import dayjs from 'dayjs';
-import { Formik, Form } from 'formik';
-import { PostDocument, useCreateReplyMutation } from '../generated/graphql';
-import InputField from './InputField';
-import { useGetIntId } from '../utils/useGetIntId';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import { RiMailSendLine } from 'react-icons/ri';
+import { Text, Flex, Box, Avatar, IconButton } from "@chakra-ui/core";
+import React, { useState } from "react";
+import dayjs from "dayjs";
+import { Formik, Form } from "formik";
+import {
+  ListPostsDocument,
+  useCreateCommentMutation
+} from "../generated/graphql";
+import InputField from "./InputField";
+import { useGetPostId } from "../utils/useGetIntId";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { RiMailSendLine } from "react-icons/ri";
 
 interface CommentCardProps {
   comment: any;
@@ -14,30 +17,30 @@ interface CommentCardProps {
 
 const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
   const [replyOpen, setReplyOpen] = useState(false);
-  const [createReply] = useCreateReplyMutation();
-  const intId = useGetIntId();
+  const [createComment] = useCreateCommentMutation();
+  const postID = useGetPostId();
 
   dayjs.extend(relativeTime);
   const commentTime = dayjs().to(parseInt(comment.createdAt));
 
   return (
-    <Box mt={4} p={4} backgroundColor='#fcfcfc'>
-      <Flex mb={3} justify='space-between'>
+    <Box mt={4} p={4} backgroundColor="#fcfcfc">
+      <Flex mb={3} justify="space-between">
         <Flex>
           <Avatar
-            size='xs'
+            size="xs"
             mr={2}
-            src={comment.creator.avatar ? comment.creator.avatar : ''}
+            src={comment.creator.avatar ? comment.creator.avatar : ""}
           />
-          <Text color='#3d5af1'>{comment.creator.username}</Text>
+          <Text color="#3d5af1">{comment.creator.username}</Text>
         </Flex>
-        <Text fontSize='xs' color='#aaaaaa'>
+        <Text fontSize="xs" color="#aaaaaa">
           {commentTime}
         </Text>
       </Flex>
       <Flex>
         {/* <UpdootSection post={comment.post} /> */}
-        <Text ml='2rem' mb={3}>
+        <Text ml="2rem" mb={3}>
           {comment.text}
         </Text>
       </Flex>
@@ -45,34 +48,36 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
         onClick={() => {
           setReplyOpen(!replyOpen);
         }}
-        fontSize='sm'
-        color='#aaaaaa'
-        ml='2rem'
-        cursor='pointer'
+        fontSize="sm"
+        color="#aaaaaa"
+        ml="2rem"
+        cursor="pointer"
       >
         Reply
       </Text>
-      {replyOpen && (
+      {/* {replyOpen && (
         <Formik
-          initialValues={{ text: '', commentId: null }}
+          initialValues={{ text: "", commentId: null }}
           onSubmit={async (values, { resetForm }) => {
-            const { errors } = await createReply({
+            const { errors } = await createComment({
               variables: {
-                ...values,
-                commentId: comment.id,
-                commentOrReply: comment.postId ? 'comment' : 'reply',
+                input: {
+                  ...values,
+                }
+                // commentID: comment.id,
+                // commentOrReply: comment.postId ? "comment" : "reply"
               },
-              update: cache => {
-                cache.evict({ fieldName: 'replies:{}' });
+              update: (cache: any) => {
+                cache.evict({ fieldName: "replies:{}" });
               },
               refetchQueries: [
                 {
-                  query: PostDocument,
+                  query: ListPostsDocument,
                   variables: {
-                    id: intId,
-                  },
-                },
-              ],
+                    id: postID
+                  }
+                }
+              ]
             });
             if (!errors) {
               resetForm();
@@ -83,23 +88,23 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
           {({ isSubmitting }) => (
             <Form>
               <Box mt={4}>
-                <InputField textarea label='' name='text' placeholder='' />
+                <InputField textarea label="" name="text" placeholder="" />
               </Box>
-              <Flex justify='flex-end'>
+              <Flex justify="flex-end">
                 <IconButton
-                  aria-label='Reply'
+                  aria-label="Reply"
                   icon={RiMailSendLine}
                   mt={4}
-                  type='submit'
+                  type="submit"
                   isLoading={isSubmitting}
-                  color='#ffffff'
-                  backgroundColor='#3d5af1'
+                  color="#ffffff"
+                  backgroundColor="#3d5af1"
                 />
               </Flex>
             </Form>
           )}
         </Formik>
-      )}
+      )} */}
       {comment?.replies?.map((reply: any) => {
         return <CommentCard key={reply.id} comment={reply} />;
       })}
